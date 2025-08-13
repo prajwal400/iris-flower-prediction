@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Iris Prediction</title>
+  <meta charset="utf-8">
+  <style>
+    /* Full-screen dark background so falling petals are visible */
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      color: white;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    /* Falling petals */
+    .petal {
+      position: absolute;
+      top: -50px;
+      width: 28px;
+      height: 28px;
+      background-image: url('https://i.ibb.co/NsnS0tW/flower-petal.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      animation: fall linear infinite;
+      opacity: 0.95;
+      z-index: 0;
+    }
+    @keyframes fall {
+      0%   { transform: translateY(0) rotate(0deg);   opacity: 1; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0.8; }
+    }
+
+    /* Form — subtle translucent, not a big box */
+    form {
+      background: rgba(0,0,0,0.35);
+      padding: 16px 18px;
+      border-radius: 10px;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 10;
+    }
+    label { display: block; margin-top: 8px; font-weight: 600; }
+    input {
+      width: 200px;
+      padding: 8px;
+      border-radius: 6px;
+      border: none;
+      margin-top: 4px;
+    }
+    button {
+      margin-top: 12px;
+      padding: 10px 14px;
+      border: none;
+      border-radius: 6px;
+      background: #ff4081;
+      color: white;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    button:hover { background: #e73370; }
+
+    /* Prediction text: no box, just glowing words */
+    #prediction {
+      margin-top: 18px;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #fff;
+      text-shadow: 0 0 10px rgba(255,255,255,0.9), 0 0 20px rgba(255,64,129,0.45);
+      z-index: 10;
+    }
+
+    /* Error text */
+    #error {
+      margin-top: 14px;
+      font-size: 1.1rem;
+      color: #ffb3c7;
+      font-weight: 700;
+      text-shadow: 0 0 8px rgba(255,64,129,0.6);
+      z-index: 10;
+    }
+
+    /* Valid examples list + quick-fill buttons */
+    .examples {
+      margin-top: 12px;
+      z-index: 10;
+      font-size: 0.95rem;
+    }
+    .example-row {
+      margin-top: 6px;
+    }
+    .examples button {
+      margin-left: 8px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: none;
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      cursor: pointer;
+    }
+    .examples button:hover {
+      background: rgba(255,255,255,0.25);
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      text-shadow: 0 0 14px rgba(255,255,255,0.8);
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Iris Flower Prediction</h1>
+
+  <form action="/predict" method="post">
+    <label>Sepal Length:</label>
+    <input type="number" name="sepal_length" step="0.1" required value="{{ (last_inputs[0] if last_inputs else '') }}">
+
+    <label>Sepal Width:</label>
+    <input type="number" name="sepal_width" step="0.1" required value="{{ (last_inputs[1] if last_inputs else '') }}">
+
+    <label>Petal Length:</label>
+    <input type="number" name="petal_length" step="0.1" required value="{{ (last_inputs[2] if last_inputs else '') }}">
+
+    <label>Petal Width:</label>
+    <input type="number" name="petal_width" step="0.1" required value="{{ (last_inputs[3] if last_inputs else '') }}">
+
+    <button type="submit">Predict</button>
+  </form>
+
+  {% if error_text %}
+    <div id="error">{{ error_text }}</div>
+  {% endif %}
+
+  {% if prediction_text %}
+    <div id="prediction">{{ prediction_text }}</div>
+  {% endif %}
+
+  <!-- Show valid examples + quick-fill buttons -->
+  <div class="examples">
+    <div>Valid inputs only:</div>
+    {% for tpl, name in valid_examples.items() %}
+      <div class="example-row">
+        <strong>{{ name|capitalize }}:</strong> ({{ '%.1f'|format(tpl[0]) }}, {{ '%.1f'|format(tpl[1]) }}, {{ '%.1f'|format(tpl[2]) }}, {{ '%.1f'|format(tpl[3]) }})
+        <button type="button" onclick="fillForm({{ tpl[0] }}, {{ tpl[1] }}, {{ tpl[2] }}, {{ tpl[3] }})">Use</button>
+      </div>
+    {% endfor %}
+  </div>
+
+  <script>
+    // Falling petals
+    for (let i = 0; i < 18; i++) {
+      const p = document.createElement('div');
+      p.className = 'petal';
+      p.style.left = Math.random() * 100 + 'vw';
+      p.style.animationDuration = (5 + Math.random() * 6) + 's';
+      p.style.animationDelay = (Math.random() * 5) + 's';
+      document.body.appendChild(p);
+    }
+
+    // Quick-fill helper
+    function fillForm(a,b,c,d) {
+      document.querySelector('input[name="sepal_length"]').value = a.toFixed(1);
+      document.querySelector('input[name="sepal_width"]').value = b.toFixed(1);
+      document.querySelector('input[name="petal_length"]').value = c.toFixed(1);
+      document.querySelector('input[name="petal_width"]').value = d.toFixed(1);
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+  </script>
+</body>
+</html>

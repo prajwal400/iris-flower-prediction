@@ -1,0 +1,16 @@
+Setosa: (5.0, 3.4, 1.5, 0.2)
+
+Versicolor: (6.0, 2.8, 4.5, 1.3)
+
+Virginica: (6.9, 3.1, 5.4, 2.1)
+
+
+app.py: Your Flask application script.
+
+iris_model.joblib: The saved machine learning model.
+
+templates/index.html: Your HTML template for the web interface.
+
+static/spinner.gif: The downloaded spinner GIF.
+Loading.io
+
