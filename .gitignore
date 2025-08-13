@@ -1,58 +1,32 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
+# Python compiled files
+*.pyc
+*.pyo
+*.pyd
 
-# C extensions
-*.so
+# Python cache folders
+__pycache__/
+*.egg-info/
 
 # Virtual environment
 venv/
 ENV/
 env/
-.venv/
 
-# Distribution / packaging
-build/
-dist/
-*.egg-info/
-*.egg
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.py,cover
-.hypothesis/
-
-# Pytest
-.pytest_cache/
-
-# Flask / Django / general logs
-instance/
+# Logs
 *.log
 
-# Environment variables file
-.env
+# IDE / Editor files
+.vscode/
+*.sublime-project
+*.sublime-workspace
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
 
 # Jupyter Notebook checkpoints
-.ipynb_checkpoints
+.ipynb_checkpoints/
 
-# VS Code settings
-.vscode/
-
-# Mac OS
-.DS_Store
-
-# Windows
-Thumbs.db
+# Joblib / model files (optional, only if you don't want to push models)
+*.joblib
